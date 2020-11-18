@@ -1,13 +1,15 @@
 # HelloID-Conn-Prov-Target-PlanCare
 PlanCare SQL Dump connector
 
-Pla- This connector uses a lot of CPU. please make sure the server is assigned at least four virtual cpus.
+This connector uses a lot of CPU. please make sure the server is assigned at least four virtual cpus.
 
 Custom source fields used in this connector:
-- Person.Custom.PlanCareAchternaam
+
+**Person.Custom.PlanCareAchternaam**
+```javascript
 function getDisplayName() {
  
-	let initials = source.voorletters_P00303;
+    let initials = source.voorletters_P00303;
     let firstName = source.roepnaam_P01003;
     let middleName = source.voorvoegsels_P00302;
     let lastName = source.geboortenaam_P00301;
@@ -47,17 +49,18 @@ function getDisplayName() {
 }
 
 getDisplayName();
-
-- Person.Custom.PlanCareAchternaamInitVoorvoegselVoornaam
+```
+**Person.Custom.PlanCareAchternaamInitVoorvoegselVoornaam**
+```javascript
 function getDisplayName() {
  
-	let initials = source.voorletters_P00303;
+    let initials = source.voorletters_P00303;
     let firstName = source.roepnaam_P01003;
     let middleName = source.voorvoegsels_P00302;
     let lastName = source.geboortenaam_P00301;
     let middleNamePartner = source.voorvoegsels_P00391;
     let lastNamePartner = source.geboortenaam_P00390;
-	let nameFormatted = "";
+    let nameFormatted = "";
 	
     switch(source.gebruikAchternaam_P00304) {
         case "E":
@@ -97,7 +100,9 @@ function getDisplayName() {
 }
 
 getDisplayName();
-- Person.Custom.PlanCareGebruikNaam
+```
+**Person.Custom.PlanCareGebruikNaam**
+```javascript
 function getValue() {
     if(source.gebruikAchternaam_P00304 == "P") {
         return "Geb. naam partner";
@@ -114,16 +119,19 @@ function getValue() {
 }
 
 getValue();
-- Person.Custom.PlanCareNaamVolledig
+```
+
+**Person.Custom.PlanCareNaamVolledig**
+```javascript
 function getDisplayName() {
  
-	let initials = source.voorletters_P00303;
+    let initials = source.voorletters_P00303;
     let firstName = source.roepnaam_P01003;
     let middleName = source.voorvoegsels_P00302;
     let lastName = source.geboortenaam_P00301;
     let middleNamePartner = source.voorvoegsels_P00391;
     let lastNamePartner = source.geboortenaam_P00390;
-	let nameFormatted = "";
+    let nameFormatted = "";
 	
     switch(source.gebruikAchternaam_P00304) {
         case "E":
@@ -163,10 +171,10 @@ function getDisplayName() {
 }
 
 getDisplayName();
-
-- Contract.Custom.PlanCareContractStartDate
+```
+**Contract.Custom.PlanCareContractStartDate**
 Use the employement start date here (and not the position start date)
 
-- Contract.Custom.PlanCareContractEndDate
+**Contract.Custom.PlanCareContractEndDate**
 Use the employement end date here (and not the position start date)
 
