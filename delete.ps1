@@ -17,7 +17,7 @@
              }
  
  Try {    
-     #Import external module
+     #Import external module (will be removed in the future)
      Import-Module dbatools #https://dbatools.io/
  
      #Do not execute when running preview

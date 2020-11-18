@@ -10,7 +10,6 @@ $sqlDatabase = "database"
 $sqlConnectionString = "Server=$sqlInstance;Database=$sqlDatabase;Trusted_Connection=True;"
 
 try {
-    #Change mapping here
     $account = @{
         Personeelsnummer                        = $p.ExternalId
         Burgerservicenummer                     = $p.ExternalId
