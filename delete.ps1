@@ -7,8 +7,8 @@
  $verbose = $False
  
  #Initialize SQL properties
- $sqlInstance = "Plancare-sql-ota\plancare"
- $sqlDatabase = "t4plancare_2"
+ $sqlInstance = "server\instance"
+ $sqlDatabase = "database"
  
  $queryPersonDelete = "DELETE FROM [$sqlDatabase].[implementation].[HRM_Import_Medewerker] WHERE Personeelsnummer = @Personeelsnummer"
  $queryContractsDelete = "DELETE FROM [$sqlDatabase].[implementation].[HRM_Import_Dienstverband] WHERE Personeelsnummer = @Personeelsnummer"

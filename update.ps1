@@ -6,8 +6,8 @@
  $verbose = $False
  
  #Initialize SQL properties
- $sqlInstance = "Plancare-sql-ota\plancare"
- $sqlDatabase = "t4plancare_2"
+ $sqlInstance = "server\instance"
+ $sqlDatabase = "database"
  
  #Change mapping here
  $account = @{
