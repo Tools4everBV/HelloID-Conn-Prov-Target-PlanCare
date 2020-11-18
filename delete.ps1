@@ -4,7 +4,6 @@
  
  $success = $False;
  $auditMessage = "Account for person " + $p.DisplayName + " not deleted succesfully"
- $verbose = $False
  
  #Initialize SQL properties
  $sqlInstance = "server\instance"
@@ -37,10 +36,13 @@
  }
  catch {
      $auditMessage = " not deleted succesfully: General error";
-     $_
-     if ($verbose) {
-         $_
-     }
+     if (![string]::IsNullOrEmpty($_.ErrorDetails.Message)) {
+         Write-Verbose -Verbose "Something went wrong $($_.ScriptStackTrace). Error message: '$($_.ErrorDetails.Message)'" 
+         $auditMessage = " not created succesfully: '$($_.ErrorDetails.Message)'"
+     } else {
+         Write-Verbose -Verbose "Something went wrong $($_.ScriptStackTrace). Error message: '$($_)'" 
+         $auditMessage = " not created succesfully: '$($_)'" 
+     } 
  }
  
  #build up result
