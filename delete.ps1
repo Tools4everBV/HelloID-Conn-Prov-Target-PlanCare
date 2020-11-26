@@ -1,3 +1,5 @@
+ #!!!This connector still needs to be converted to the .net sql provider!!!
+ 
  #Initialize default properties
  $p = $person | ConvertFrom-Json
  $accountReference = $accountReference | ConvertFrom-Json
@@ -17,7 +19,7 @@
              }
  
  Try {    
-     #Import external module (will be removed in the future)
+     #Import external module
      Import-Module dbatools #https://dbatools.io/
  
      #Do not execute when running preview

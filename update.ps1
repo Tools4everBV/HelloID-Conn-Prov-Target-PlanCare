@@ -10,6 +10,7 @@ $sqlDatabase = "database"
 $sqlConnectionString = "Server=$sqlInstance;Database=$sqlDatabase;Trusted_Connection=True;"
 
 try {
+    #Change mapping here
     $account = @{
         Personeelsnummer                        = $p.ExternalId
         Burgerservicenummer                     = $p.ExternalId
@@ -45,15 +46,13 @@ try {
         SSOUsername                             = $p.MicrosoftActiveDirectory.SamAccountName
     }
 
-    # Remove employments older than 180 days
-    $activePost = -180
+# Remove employments older than 180 days
+    $activePost = 180
     $now = (get-date).Date
     $planCareContracts = New-Object System.Collections.Generic.List[System.Object]
     foreach ($contract in $p.contracts)
     {
-        write-verbose -verbose "End date: $($contract.Custom.PlanCareContractEndDate)"
-            
-        if ([string]::IsNullOrEmpty($contract.Custom.PlanCareContractEndDate) -or ([DateTime]$contract.Custom.PlanCareContractEndDate).addDays($activePost) -gt $now)
+        if ([string]::IsNullOrEmpty($contract.Custom.PlanCareContractEndDate) -or ([datetime]::parseexact($($contract.Custom.PlanCareContractEndDate), 'yyyy-MM-dd', $null)).addDays($activePost) -gt $now)
         {
             $planCareContract = @{
                 Personeelsnummer                 = $p.ExternalId

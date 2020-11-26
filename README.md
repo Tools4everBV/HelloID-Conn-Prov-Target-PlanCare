@@ -174,7 +174,15 @@ getDisplayName();
 ```
 **Contract.Custom.PlanCareContractStartDate**
 Use the employement start date here (and not the position start date)
+To parse a date use:
+```Powershell
+        Datum_in_dienst                         = [datetime]::parseexact($p.PrimaryContract.Custom.PlanCareContractStartDate, 'yyyy-MM-dd', $null)
+```
 
 **Contract.Custom.PlanCareContractEndDate**
 Use the employement end date here (and not the position start date)
+To parse a date use:
+```Powershell
+        Datum_uit_dienst                         = [datetime]::parseexact($p.PrimaryContract.Custom.PlanCareContractEndDate, 'yyyy-MM-dd', $null)
+```
 
