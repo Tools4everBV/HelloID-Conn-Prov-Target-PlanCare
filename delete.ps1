@@ -1,5 +1,3 @@
- #!!!This connector still needs to be converted to the .net sql provider!!!
- 
  #Initialize default properties
  $p = $person | ConvertFrom-Json
  $accountReference = $accountReference | ConvertFrom-Json
@@ -7,9 +5,11 @@
  $success = $False;
  $auditMessage = "Account for person " + $p.DisplayName + " not deleted succesfully"
  
- #Initialize SQL properties
- $sqlInstance = "server\instance"
- $sqlDatabase = "database"
+#Initialize SQL properties
+$config = $configuration | ConvertFrom-Json 
+$sqlInstance = $config.connection.server
+$sqlDatabase = $config.connection.database
+
  
  $queryPersonDelete = "DELETE FROM [$sqlDatabase].[implementation].[HRM_Import_Medewerker] WHERE Personeelsnummer = @Personeelsnummer"
  $queryContractsDelete = "DELETE FROM [$sqlDatabase].[implementation].[HRM_Import_Dienstverband] WHERE Personeelsnummer = @Personeelsnummer"

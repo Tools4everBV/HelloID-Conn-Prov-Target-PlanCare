@@ -6,8 +6,9 @@ $success = $False;
 $auditMessage = "Account for person " + $p.DisplayName + " not created succesfully";
 
 #Initialize SQL properties
-$sqlInstance = "server\instance"
-$sqlDatabase = "database"
+$config = $configuration | ConvertFrom-Json 
+$sqlInstance = $config.connection.server
+$sqlDatabase = $config.connection.database
 $sqlConnectionString = "Server=$sqlInstance;Database=$sqlDatabase;Trusted_Connection=True;"
 
 try {
@@ -24,12 +25,12 @@ try {
         Gebruik_naam                            = $p.Custom.PlanCareGebruikNaam
         Naam_volledig                           = $p.Custom.PlanCareNaamVolledig
         Achternaam                              = $p.Custom.PlanCareAchternaam
-        Voorvoegsel                             = $p.Name.FamilyNamePrefix # vullen met juiste waarde! #Dit lijkt me niet te kloppen (maar is wel gelijk aan de IAM2 configuratie)
+        Voorvoegsel                             = $p.Custom.PlanCareVoorvoegsel
         Achternaam_init_voorvoegsel             = $p.Custom.PlanCareNaamVolledig
         Achternaam_init_voorvoegsel_voornaam    = $p.Custom.PlanCareAchternaamInitVoorvoegselVoornaam
         Achternaam_init_voorvoegsel_roepnaam    = $p.Custom.PlanCareAchternaamInitVoorvoegselVoornaam
         Geslacht                                = $p.Details.Gender
-        Email                                   = $p.MicrosoftActiveDirectory.mail
+        Email                                   = $p.Accounts.MicrosoftActiveDirectory.mail
         Geboortedatum                           = $null
         Straat                                  = $null
         Toev_voor_straat                        = $null
@@ -44,7 +45,7 @@ try {
         Mobiel_prive                            = $null
         Datum_in_dienst                         = $p.PrimaryContract.Custom.PlanCareContractStartDate
         Datum_uit_dienst                        = $p.PrimaryContract.Custom.PlanCareContractEndDate
-        SSOUsername                             = $p.MicrosoftActiveDirectory.SamAccountName
+        SSOUsername                             = $p.Accounts.MicrosoftActiveDirectory.SamAccountName
     }
 
    # Remove employments older than 180 days
@@ -53,23 +54,25 @@ try {
     $planCareContracts = New-Object System.Collections.Generic.List[System.Object]
     foreach ($contract in $p.contracts)
     {
-        if ([string]::IsNullOrEmpty($contract.Custom.PlanCareContractEndDate) -or ([datetime]::parseexact($($contract.Custom.PlanCareContractEndDate), 'yyyy-MM-dd', $null)).addDays($activePost) -gt $now)
+        if ([string]::IsNullOrEmpty($contract.Custom.PlanCareContractEndDate) -or ([datetime]$($contract.Custom.PlanCareContractEndDate)).addDays($activePost) -gt $now)
         {
             $planCareContract = @{
                 Personeelsnummer                 = $p.ExternalId
                 DV                               = $contract.Details.Sequence
-                Functiecode                      = $contract.Title.Code
-                Functienaam                      = $contract.Title.Name
+                Functiecode                      = $contract.Custom.PlanCareFunctionId
+                Functienaam                      = $contract.Custom.PlanCareFunctionName
                 Kostenplaatscode                 = $contract.CostCenter.Code
                 Kostenplaatsomschrijving         = $contract.CostCenter.Name
-                Percentage_verdeling             = $contract.Details.Fte
-                Begindatum_contract              = $contract.Custom.PlanCareContractStartDate
-                Einddatum_contract               = $contract.Custom.PlanCareContractEndDate
-                Begindatum_functieregel          = $contract.StartDate
-                Einddatum_functieregel           = $contract.EndDate
+                Percentage_verdeling             = $contract.Custom.PlanCareFte
+                #Begindatum_contract              = $contract.Custom.PlanCareContractStartDate
+                #Einddatum_contract               = $contract.Custom.PlanCareContractEndDate
+                Begindatum_contract              = $contract.Custom.PlanCarePositionStartDate
+                Einddatum_contract               = $contract.Custom.PlanCarePositionEndDate
+                Begindatum_functieregel          = $contract.Custom.PlanCarePositionStartDate
+                Einddatum_functieregel           = $contract.Custom.PlanCarePositionEndDate
                 Parttime_percentage              = 0
-                OEcode                           = $contract.Department.ExternalId
-                OEomschrijving                   = $contract.Department.DisplayName
+                OEcode                           = $contract.Team.Code
+                OEomschrijving                   = $contract.Team.Name
                 Uitsluiten_Plancare              = 0
             }
         

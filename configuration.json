@@ -1,0 +1,23 @@
+[
+    {
+      "key": "connection.server",
+      "type": "input",
+      "defaultValue": "",
+      "templateOptions": {
+        "label": "SQL Server/Instance",
+        "placeholder": "Please enter the PlanCare server/instance",
+        "required": true
+      }
+    },
+    {
+      "key": "connection.database",
+      "type": "input",
+      "defaultValue": "",
+      "templateOptions": {
+        "label": "Database",
+        "placeholder": "Please enter the PlanCare database",
+        "description": "",
+        "required": true
+      }
+    }
+  ]
