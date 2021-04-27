@@ -186,3 +186,5 @@ To parse a date use:
         Datum_uit_dienst                         = [datetime]::parseexact($p.PrimaryContract.Custom.PlanCareContractEndDate, 'yyyy-MM-dd', $null)
 ```
 
+# HelloID Docs
+The official HelloID documentation can be found at: https://docs.helloid.com/
