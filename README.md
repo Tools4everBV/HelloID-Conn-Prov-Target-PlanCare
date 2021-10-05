@@ -1,11 +1,61 @@
 # HelloID-Conn-Prov-Target-PlanCare
 ## PlanCare SQL Dump connector
 
-The powershell actions this script executes are resource intensive. Please make sure the server is assigned at least four virtual CPU's.
+The powershell actions this script executes are resource intensive. Please make sure you configure the server accordingly.
 
-### Custom source fields used in this connector:
+## Plancare
 
-**Person.Custom.PlanCareAchternaam**
+The Plancare connector is a full export connector to two database tables: &#39;Implementation.HRM\_Import\_Medewerker&#39; and &#39;Implementation.HRM\_Import\_Dienstverband&#39;.
+
+It can also be used to export the data to the staging and test environments, which perform the same actions, but on different databases.
+
+## Getting started
+
+### Connector settings
+
+The following custom connector settings are available and required:
+
+| Setting     | Description |
+| ------------ | ----------- |
+| SQL Server/Instance | The server / instance where the plancare database resides |
+| Database | The PlanCare database name |
+
+### Prerequisites
+
+- This connector requires an On-Premise HelloID Agent
+- Using the HelloID On-Premises agent, Windows PowerShell 5.1 must be installed.
+
+### Supported PowerShell versions
+
+The connector is created for Windows PowerShell 5.1. This means that the connector can not be executed in the cloud and requires an On-Premises installation of the HelloID Agent.
+
+> Older versions of Windows PowerShell are not supported.
+
+## Business Logic
+
+Voor de export worden de volgende regels gehanteerd:
+### HR Gegevens
+
+- Alleen primaire identiteiten worden meegenomen. (In IAM. In HelloID zit geen aggregatie)
+- Alle personen met een dienstverband dat over 31 dagen start worden in de rapportage meegenomen.
+- Alle personen met een actief dienstverband worden meegenomen.
+- Alle personen die maximaal 30 dagen uit dienst zijn worden meegenomen.
+- De functies en afdelingen worden aan de dienstverbanden gekoppeld.
+
+### AD Gegevens
+
+- Alleen de AD-accounts met een ingevuld emailadres worden meegenomen.
+- Alleen de attributen sAMAccountName, mail en employeeId worden opgehaald.
+- Deze gegevens worden op basis van de waarde in het attribuut &#39;employeeId&#39; aan de HR-gegevens gekoppeld. Alleen de gekoppelde gegevens (common) worden gebruikt.
+
+### Database en exportregels
+
+- De databases worden voor elke export geleegd.
+- Elke toevoeging of verwijdering van een persoon en dienstverband wordt gelogd.
+
+## Custom source fields used in this connector:
+
+### Person.Custom.PlanCareAchternaam
 ```javascript
 function getDisplayName() {
  
@@ -50,7 +100,7 @@ function getDisplayName() {
 
 getDisplayName();
 ```
-**Person.Custom.PlanCareAchternaamInitVoorvoegselVoornaam**
+### Person.Custom.PlanCareAchternaamInitVoorvoegselVoornaam
 ```javascript
 function getDisplayName() {
  
@@ -101,7 +151,7 @@ function getDisplayName() {
 
 getDisplayName();
 ```
-**Person.Custom.PlanCareGebruikNaam**
+### Person.Custom.PlanCareGebruikNaam
 ```javascript
 function getValue() {
     if(source.gebruikAchternaam_P00304 == "P") {
@@ -121,7 +171,7 @@ function getValue() {
 getValue();
 ```
 
-**Person.Custom.PlanCareNaamVolledig**
+### Person.Custom.PlanCareNaamVolledig
 ```javascript
 function getDisplayName() {
  
@@ -172,15 +222,15 @@ function getDisplayName() {
 
 getDisplayName();
 ```
-**Contract.Custom.PlanCareContractStartDate**
+### Contract.Custom.PlanCareContractStartDate
 Use the employement start date here (and not the position start date)
 To parse a date use:
 ```Powershell
         Datum_in_dienst                         = [datetime]::parseexact($p.PrimaryContract.Custom.PlanCareContractStartDate, 'yyyy-MM-dd', $null)
 ```
 
-**Contract.Custom.PlanCareContractEndDate**
-Use the employement end date here (and not the position start date)
+### Contract.Custom.PlanCareContractEndDate
+Use the employment end date here (and not the position start date)
 To parse a date use:
 ```Powershell
         Datum_uit_dienst                         = [datetime]::parseexact($p.PrimaryContract.Custom.PlanCareContractEndDate, 'yyyy-MM-dd', $null)
