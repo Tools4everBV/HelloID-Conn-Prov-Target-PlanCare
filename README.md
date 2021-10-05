@@ -32,28 +32,26 @@ The connector is created for Windows PowerShell 5.1. This means that the connect
 > Older versions of Windows PowerShell are not supported.
 
 ## Business Logic
+The following business logic is configured in the default connector
 
-Voor de export worden de volgende regels gehanteerd:
-### HR Gegevens
+### HR Data
+- All persons with an employment contract that starts in 31 days are included in the report.
+- All persons with active employment are included.
+- All persons who have been inactive for a maximum of 30 days are included.
+- The functions and departments are linked to the employment contracts.
 
-- Alleen primaire identiteiten worden meegenomen. (In IAM. In HelloID zit geen aggregatie)
-- Alle personen met een dienstverband dat over 31 dagen start worden in de rapportage meegenomen.
-- Alle personen met een actief dienstverband worden meegenomen.
-- Alle personen die maximaal 30 dagen uit dienst zijn worden meegenomen.
-- De functies en afdelingen worden aan de dienstverbanden gekoppeld.
+### AD Data
 
-### AD Gegevens
+- Only the AD accounts with a entered email address are included.
+- Only the attributes sAMAccountName, mail and employeeId are retrieved.
+- This data is based on the value in the 'employeeId' linked to the HR data. Only the linked data (common) is used.
 
-- Alleen de AD-accounts met een ingevuld emailadres worden meegenomen.
-- Alleen de attributen sAMAccountName, mail en employeeId worden opgehaald.
-- Deze gegevens worden op basis van de waarde in het attribuut &#39;employeeId&#39; aan de HR-gegevens gekoppeld. Alleen de gekoppelde gegevens (common) worden gebruikt.
+### Database and export
 
-### Database en exportregels
+- The databases are exported before each export.
+- An addition or removal of a person or an employment will be audited.
 
-- De databases worden voor elke export geleegd.
-- Elke toevoeging of verwijdering van een persoon en dienstverband wordt gelogd.
-
-## Custom source fields used in this connector:
+## Custom source fields used in this connector
 
 ### Person.Custom.PlanCareAchternaam
 ```javascript
