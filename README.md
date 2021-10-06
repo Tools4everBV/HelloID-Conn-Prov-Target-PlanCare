@@ -5,7 +5,7 @@ The powershell actions this script executes are resource intensive. Please make 
 
 ## Plancare
 
-The Plancare connector is a full export connector to two database tables: &#39;Implementation.HRM\_Import\_Medewerker&#39; and &#39;Implementation.HRM\_Import\_Dienstverband&#39;.
+The Plancare connector is a full export connector to two database tables: &#39;Implementation.HRM\_Import\_Medewerker&#39; and &#39;Implementation.HRM\_Import\_Dienstverband&#39;. 
 
 It can also be used to export the data to the staging and test environments, which perform the same actions, but on different databases.
 
@@ -24,6 +24,7 @@ The following custom connector settings are available and required:
 
 - This connector requires an On-Premise HelloID Agent
 - Using the HelloID On-Premises agent, Windows PowerShell 5.1 must be installed.
+- Additional configuration is required in PlanCare. This is usually done by a PlanCare consultant.
 
 ### Supported PowerShell versions
 
