@@ -81,7 +81,7 @@ try {
     }
 
     #Sanity check
-    if ($planCareContracts.count -eq 0) { 
+    if ($planCareContracts.count -eq 0) {
         throw "PlanCare contracts cannot be 0"
     }
 
@@ -231,14 +231,14 @@ try {
     $sqlConnection = New-Object System.Data.SqlClient.SqlConnection
     $sqlConnection.ConnectionString = $sqlConnectionString
     $sqlConnection.Open()
-       
+
     #Lookup record
     $sqlCmd = New-Object System.Data.SqlClient.SqlCommand
     $sqlCmd.Connection = $sqlConnection
     $sqlCmd.CommandText = $queryPersonLookup
     $account.Keys | Foreach-Object { $null = $sqlCmd.Parameters.Add("@" + $_, "$($account.Item($_))") }
-       
-    # Execute the command against the database without returning results (NonQuery). 
+
+    # Execute the command against the database without returning results (NonQuery).
     $personExists = $SqlCmd.ExecuteReader()
     $lookupResult = @()
     while ($personExists.Read()) {
@@ -254,12 +254,12 @@ try {
         # detect if there's one record, or more. if one record, then update, if more records, then throw error
         if ($lookupResult.count -eq 1)  {
             $queryPerson = $queryPersonUpdate
-            Write-Verbose -Verbose "Person record exists. Updating person record for employeeId '$($p.externalId)'" 
+            Write-Verbose -Verbose "Person record exists. Updating person record for employeeId '$($p.externalId)'"
         } else {
             throw "Multiple ($($lookupResult.count) person records found with employeeId '$($p.externalId)'"
         }
     }
-    
+
     #Do not execute when running preview
     if (-Not($dryRun -eq $True)) {
 
@@ -293,25 +293,25 @@ try {
 } catch {
     $auditMessage = " not created succesfully: General error";
     if (![string]::IsNullOrEmpty($_.ErrorDetails.Message)) {
-        Write-Verbose -Verbose "Something went wrong $($_.ScriptStackTrace). Error message: '$($_.ErrorDetails.Message)'" 
+        Write-Verbose -Verbose "Something went wrong $($_.ScriptStackTrace). Error message: '$($_.ErrorDetails.Message)'"
         $auditMessage = " not created succesfully: '$($_.ErrorDetails.Message)'"
     } else {
-        Write-Verbose -Verbose "Something went wrong $($_.ScriptStackTrace). Error message: '$($_)'" 
-        $auditMessage = " not created succesfully: '$($_)'" 
-    }        
+        Write-Verbose -Verbose "Something went wrong $($_.ScriptStackTrace). Error message: '$($_)'"
+        $auditMessage = " not created succesfully: '$($_)'"
+    }
 } finally {
     $sqlConnection.Close()
 }
 
 #build up result
-$result = [PSCustomObject]@{ 
-    Success          = $success;
-    AccountReference = $accountReference;
-    AuditDetails     = $auditMessage;
-    Account          = $account;
-    
+$result = [PSCustomObject]@{
+    Success          = $success
+    AccountReference = $accountReference
+    AuditDetails     = $auditMessage
+    Account          = $account
+
     # Optionally return data for use in other systems
-    ExportData = [PSCustomObject]@{};
+    ExportData = [PSCustomObject]@{}
 };
 
 Write-Output $result | ConvertTo-Json -Depth 10
